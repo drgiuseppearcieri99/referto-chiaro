@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     const path = `${email}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_')}`;
     await supabaseAdmin.storage.from(process.env.SUPABASE_REPORTS_BUCKET || 'reports').upload(path, buffer, { contentType: 'application/pdf', upsert: false });
 
-    const parsed = await pdf(buffer);
+    const parsed = await pdf.default(buffer);
     const values = extractLabValues(parsed.text);
     const traffic = calculateTrafficLight(values);
     const readableLight = lightLabel(traffic.light);
