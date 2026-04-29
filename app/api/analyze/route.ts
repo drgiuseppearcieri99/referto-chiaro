@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import pdf from 'pdf-parse';
+import * as pdf from 'pdf-parse';
 import { supabaseAdmin } from '@/lib/supabase';
 import { calculateTrafficLight, extractLabValues, lightLabel } from '@/lib/traffic-light';
 import { sendReportEmail } from '@/lib/email';
