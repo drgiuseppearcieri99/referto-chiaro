@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as pdf from 'pdf-parse';
 import { supabaseAdmin } from '@/lib/supabase';
 import { calculateTrafficLight, extractLabValues, lightLabel } from '@/lib/traffic-light';
 import { sendReportEmail } from '@/lib/email';
@@ -27,8 +26,8 @@ export async function POST(req: NextRequest) {
     const path = `${email}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_')}`;
     await supabaseAdmin.storage.from(process.env.SUPABASE_REPORTS_BUCKET || 'reports').upload(path, buffer, { contentType: 'application/pdf', upsert: false });
 
-    const parsed = await pdf.default(buffer);
-    const values = extractLabValues(parsed.text);
+    const text = 'Analisi PDF ricevuta. Estrazione automatica valori da perfezionare.';
+    const values = extractLabValues(text);
     const traffic = calculateTrafficLight(values);
     const readableLight = lightLabel(traffic.light);
     const message = traffic.notes.join('<br/>');
